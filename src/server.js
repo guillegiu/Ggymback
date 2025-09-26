@@ -45,6 +45,11 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'ggym API is running' });
 });
 
+// Health check para Railway
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK', message: 'ggym API is running' });
+});
+
 // Socket.io para notificaciones en tiempo real
 io.on('connection', (socket) => {
   console.log('Usuario conectado:', socket.id);
