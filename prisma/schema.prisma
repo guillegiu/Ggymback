@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  avatar    String?
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relaciones
+  posts        Post[]
+  friends      Friend[] @relation("UserFriends")
+  friendOf     Friend[] @relation("FriendOf")
+  routines     Routine[]
+  progress     UserProgress[]
+  attendance   GymAttendance[]
+  achievements Achievement[]
+  likes        Like[]
+
+  @@map("users")
+}
+
+model Friend {
+  id        String   @id @default(cuid())
+  userId    String
+  friendId  String
+  status    String   @default("pending") // pending, accepted, blocked
+  createdAt DateTime @default(now())
+
+  user   User @relation("UserFriends", fields: [userId], references: [id], onDelete: Cascade)
+  friend User @relation("FriendOf", fields: [friendId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, friendId])
+  @@map("friends")
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  userId    String
+  imageUrl  String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  likes Like[]
+  attendance GymAttendance[]
+
+  @@map("posts")
+}
+
+model Like {
+  id     String @id @default(cuid())
+  userId String
+  postId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@map("likes")
+}
+
+model Exercise {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String
+  imageUrl    String?
+  youtubeUrl  String?
+  category    String
+  createdAt   DateTime @default(now())
+
+  routineExercises RoutineExercise[]
+
+  @@map("exercises")
+}
+
+model Routine {
+  id     String @id @default(cuid())
+  userId String
+  name   String
+  type   String // A, B, C, custom
+
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  routineExercises RoutineExercise[]
+
+  @@map("routines")
+}
+
+model RoutineExercise {
+  id         String @id @default(cuid())
+  routineId  String
+  exerciseId String
+  order      Int
+  sets       Int?
+  reps       Int?
+  weight     Float?
+
+  routine  Routine  @relation(fields: [routineId], references: [id], onDelete: Cascade)
+  exercise Exercise @relation(fields: [exerciseId], references: [id])
+
+  @@map("routine_exercises")
+}
+
+model UserProgress {
+  id        String   @id @default(cuid())
+  userId    String
+  weight    Float?
+  chest     Float?
+  waist     Float?
+  biceps    Float?
+  date      DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_progress")
+}
+
+model GymAttendance {
+  id     String @id @default(cuid())
+  userId String
+  postId String
+  date   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@map("gym_attendance")
+}
+
+model Achievement {
+  id        String   @id @default(cuid())
+  userId    String
+  badgeType String   // "7_days", "30_days", "100_workouts", etc.
+  earnedAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("achievements")
+}
