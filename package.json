@@ -11,6 +11,8 @@
     "db:studio": "prisma studio",
     "seed:exercises": "node src/utils/seedExercises.js",
     "seed:users": "node src/utils/seedUsers.js",
+    "seed:friends": "node src/utils/seedFriends.js",
+    "seed:routines": "node src/utils/seedRoutines.js",
     "seed:all": "node src/utils/seedAll.js"
   },
   "dependencies": {

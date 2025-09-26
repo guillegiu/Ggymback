@@ -3,8 +3,8 @@ const bcrypt = require('bcryptjs');
 
 const users = [
   {
-    name: "Juan Pérez",
-    email: "juan@test.com",
+    name: "Guillermo Torres",
+    email: "guillermo@test.com",
     password: "123456",
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
   },
@@ -15,22 +15,10 @@ const users = [
     avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face"
   },
   {
-    name: "Carlos López",
-    email: "carlos@test.com",
+    name: "Juan Pérez",
+    email: "juan@test.com",
     password: "123456", 
     avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
-  },
-  {
-    name: "Ana Martínez",
-    email: "ana@test.com",
-    password: "123456",
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face"
-  },
-  {
-    name: "Luis Rodríguez",
-    email: "luis@test.com",
-    password: "123456",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face"
   }
 ];
 
