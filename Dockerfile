@@ -1,18 +1,27 @@
+# Usar Node.js 18 Alpine para mejor rendimiento
 FROM node:18-alpine
 
+# Instalar dependencias del sistema necesarias para Prisma
+RUN apk add --no-cache openssl
+
+# Establecer directorio de trabajo
 WORKDIR /app
 
-# Copiar package.json y package-lock.json
+# Copiar archivos de dependencias
 COPY package*.json ./
+COPY prisma ./prisma/
 
 # Instalar dependencias
-RUN npm install
+RUN npm ci --only=production
+
+# Generar cliente Prisma
+RUN npx prisma generate
 
 # Copiar el resto del código
 COPY . .
 
-# Exponer el puerto
+# Exponer puerto
 EXPOSE 5000
 
-# Comando para ejecutar la aplicación
-CMD ["npm", "run", "dev"]
+# Comando de inicio
+CMD ["npm", "start"]

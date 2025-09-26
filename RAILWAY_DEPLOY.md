@@ -29,8 +29,9 @@ PORT=5000
    - `PORT`: 5000 (Railway lo maneja automáticamente)
 
 4. **Deploy:**
-   - Railway detectará automáticamente que es un proyecto Node.js
-   - Ejecutará `npm install` y `npm start`
+   - Railway usará el Dockerfile personalizado
+   - Instalará OpenSSL para Prisma
+   - Generará el cliente Prisma automáticamente
    - El deploy se completará automáticamente
 
 ## Comandos Post-Deploy
@@ -38,15 +39,19 @@ PORT=5000
 Después del deploy, ejecuta estos comandos en Railway:
 
 ```bash
-# Generar cliente Prisma
-npx prisma generate
-
-# Aplicar migraciones
-npx prisma db push
+# Aplicar migraciones (ya no es necesario generar Prisma)
+npx prisma db push --schema=./prisma/schema.prisma
 
 # Poblar base de datos
 npm run seed:all
 ```
+
+## Solución de Problemas
+
+Si encuentras errores de Prisma:
+1. Verifica que la `DATABASE_URL` esté configurada correctamente
+2. Asegúrate de que el servicio PostgreSQL esté funcionando
+3. Revisa los logs de Railway para más detalles
 
 ## Verificación
 
